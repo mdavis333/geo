@@ -17,7 +17,7 @@ package s2
 import (
 	"math"
 
-	"github.com/golang/geo/r3"
+	"github.com/mdavis333/geo/r3"
 )
 
 //

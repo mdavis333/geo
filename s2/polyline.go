@@ -19,7 +19,7 @@ import (
 	"io"
 	"math"
 
-	"github.com/golang/geo/s1"
+	"github.com/mdavis333/geo/s1"
 )
 
 // Polyline represents a sequence of zero or more vertices connected by

@@ -18,9 +18,9 @@ import (
 	"math"
 	"testing"
 
-	"github.com/golang/geo/r1"
-	"github.com/golang/geo/r3"
-	"github.com/golang/geo/s1"
+	"github.com/mdavis333/geo/r1"
+	"github.com/mdavis333/geo/r3"
+	"github.com/mdavis333/geo/s1"
 )
 
 func rectBoundForPoints(a, b Point) Rect {

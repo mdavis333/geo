@@ -19,8 +19,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/golang/geo/r2"
-	"github.com/golang/geo/s1"
+	"github.com/mdavis333/geo/r2"
+	"github.com/mdavis333/geo/s1"
 )
 
 func TestCellIDFromFace(t *testing.T) {

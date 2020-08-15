@@ -17,7 +17,7 @@ package s2
 import (
 	"sort"
 
-	"github.com/golang/geo/s1"
+	"github.com/mdavis333/geo/s1"
 )
 
 // EdgeQueryOptions holds the options for controlling how EdgeQuery operates.

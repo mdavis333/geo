@@ -17,9 +17,9 @@ package s2
 import (
 	"math"
 
-	"github.com/golang/geo/r1"
-	"github.com/golang/geo/r3"
-	"github.com/golang/geo/s1"
+	"github.com/mdavis333/geo/r1"
+	"github.com/mdavis333/geo/r3"
+	"github.com/mdavis333/geo/s1"
 )
 
 // RectBounder is used to compute a bounding rectangle that contains all edges

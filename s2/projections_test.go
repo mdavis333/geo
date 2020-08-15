@@ -18,8 +18,8 @@ import (
 	"math"
 	"testing"
 
-	"github.com/golang/geo/r2"
-	"github.com/golang/geo/r3"
+	"github.com/mdavis333/geo/r2"
+	"github.com/mdavis333/geo/r3"
 )
 
 func TestPlateCarreeProjectionInterpolate(t *testing.T) {
