@@ -639,6 +639,13 @@ func NewShapeIndex() *ShapeIndex {
 	}
 }
 
+// iteratorUnsafe returns an iterator for this index that does not
+// call maybeApplyUpdates as that will cause a deadlock if the current thread
+// already holds the lock
+func (s *ShapeIndex) iteratorUnsafe() *ShapeIndexIterator {
+	return NewShapeIndexIterator(s, IteratorBegin)
+}
+
 // Iterator returns an iterator for this index.
 func (s *ShapeIndex) Iterator() *ShapeIndexIterator {
 	s.maybeApplyUpdates()
@@ -963,7 +970,7 @@ func (s *ShapeIndex) shrinkToFit(pcell *PaddedCell, bound r2.Rect) CellID {
 	if !s.isFirstUpdate() && shrunkID != pcell.CellID() {
 		// Don't shrink any smaller than the existing index cells, since we need
 		// to combine the new edges with those cells.
-		iter := s.Iterator()
+		iter := s.iteratorUnsafe()
 		if iter.LocateCellID(shrunkID) == Indexed {
 			shrunkID = iter.CellID()
 		}
@@ -1017,7 +1024,7 @@ func (s *ShapeIndex) updateEdges(pcell *PaddedCell, edges []*clippedEdge, t *tra
 		// There may be existing index cells contained inside pcell. If we
 		// encounter such a cell, we need to combine the edges being updated with
 		// the existing cell contents by absorbing the cell.
-		iter := s.Iterator()
+		iter := s.iteratorUnsafe()
 		r := iter.LocateCellID(pcell.id)
 		if r == Disjoint {
 			disjointFromIndex = true
