@@ -206,13 +206,15 @@ type ShapeIndexIterator struct {
 	position int
 	id       CellID
 	cell     *ShapeIndexCell
+	unsafe   bool
 }
 
 // NewShapeIndexIterator creates a new iterator for the given index. If a starting
 // position is specified, the iterator is positioned at the given spot.
-func NewShapeIndexIterator(index *ShapeIndex, pos ...ShapeIndexIteratorPos) *ShapeIndexIterator {
+func NewShapeIndexIterator(index *ShapeIndex, unsafe bool, pos ...ShapeIndexIteratorPos) *ShapeIndexIterator {
 	s := &ShapeIndexIterator{
-		index: index,
+		index:  index,
+		unsafe: unsafe,
 	}
 
 	if len(pos) > 0 {
@@ -238,6 +240,7 @@ func (s *ShapeIndexIterator) clone() *ShapeIndexIterator {
 		position: s.position,
 		id:       s.id,
 		cell:     s.cell,
+		unsafe:   s.unsafe,
 	}
 }
 
@@ -262,7 +265,7 @@ func (s *ShapeIndexIterator) Center() Point {
 
 // Begin positions the iterator at the beginning of the index.
 func (s *ShapeIndexIterator) Begin() {
-	if !s.index.IsFresh() {
+	if !s.unsafe && !s.index.IsFresh() {
 		s.index.maybeApplyUpdates()
 	}
 	s.position = 0
@@ -643,19 +646,19 @@ func NewShapeIndex() *ShapeIndex {
 // call maybeApplyUpdates as that will cause a deadlock if the current thread
 // already holds the lock
 func (s *ShapeIndex) iteratorUnsafe() *ShapeIndexIterator {
-	return NewShapeIndexIterator(s, IteratorBegin)
+	return NewShapeIndexIterator(s, true, IteratorBegin)
 }
 
 // Iterator returns an iterator for this index.
 func (s *ShapeIndex) Iterator() *ShapeIndexIterator {
 	s.maybeApplyUpdates()
-	return NewShapeIndexIterator(s, IteratorBegin)
+	return NewShapeIndexIterator(s, false, IteratorBegin)
 }
 
 // Begin positions the iterator at the first cell in the index.
 func (s *ShapeIndex) Begin() *ShapeIndexIterator {
 	s.maybeApplyUpdates()
-	return NewShapeIndexIterator(s, IteratorBegin)
+	return NewShapeIndexIterator(s, false, IteratorBegin)
 }
 
 // End positions the iterator at the last cell in the index.
@@ -665,7 +668,7 @@ func (s *ShapeIndex) End() *ShapeIndexIterator {
 	// will be invalid or not the end. For now, things will be undefined if this
 	// happens. See about referencing the IsFresh to guard for this in the future.
 	s.maybeApplyUpdates()
-	return NewShapeIndexIterator(s, IteratorEnd)
+	return NewShapeIndexIterator(s, false, IteratorEnd)
 }
 
 // Len reports the number of Shapes in this index.
