@@ -581,7 +581,7 @@ func (e *EdgeQuery) initQueue() {
 	if len(e.indexCovering) == 0 {
 		// We delay iterator initialization until now to make queries on very
 		// small indexes a bit faster (i.e., where brute force is used).
-		e.iter = NewShapeIndexIterator(e.index)
+		e.iter = NewShapeIndexIterator(e.index, false)
 	}
 
 	// Optimization: if the user is searching for just the closest edge, and the
@@ -693,8 +693,8 @@ func (e *EdgeQuery) initCovering() {
 
 	// TODO(roberts): Use a single iterator below and save position
 	// information using pair {CellID, ShapeIndexCell}.
-	next := NewShapeIndexIterator(e.index, IteratorBegin)
-	last := NewShapeIndexIterator(e.index, IteratorEnd)
+	next := NewShapeIndexIterator(e.index, false, IteratorBegin)
+	last := NewShapeIndexIterator(e.index, false, IteratorEnd)
 	last.Prev()
 	if next.CellID() != last.CellID() {
 		// The index has at least two cells. Choose a level such that the entire
