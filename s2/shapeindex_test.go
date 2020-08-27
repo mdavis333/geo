@@ -257,7 +257,7 @@ func testIteratorMethods(t *testing.T, index *ShapeIndex) {
 		ci := it.CellID()
 		skipped := CellUnionFromRange(minCellID, ci.RangeMin())
 
-		it2 := NewShapeIndexIterator(index, IteratorEnd)
+		it2 := NewShapeIndexIterator(index, false, IteratorEnd)
 		for i := 0; i < len(skipped); i++ {
 			if it2.LocatePoint(skipped[i].Point()) {
 				t.Errorf("iterator should not have been able to find the cell %v which was not in the index", skipped[i].Point())
